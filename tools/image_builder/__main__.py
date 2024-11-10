@@ -137,7 +137,8 @@ def build_image(
         releases_url = f'{GITHUB_REPO_URL}/releases/download'
         webview_base_url = f'{releases_url}/WebView-v0.3.3'
 
-        qt_version = '6.6.3' if board == 'x86' else '5.15.14'
+        #qt_version = '6.6.3' if board == 'x86' else '5.15.14'
+        qt_version = '5.15.14' if board.startswith('pi') else '6.6.3'
         qt_major_version = qt_version.split('.')[0]
 
         apt_dependencies = [
@@ -249,7 +250,7 @@ def build_image(
             'libswscale-dev',
         ]
 
-        if board != 'x86':
+        if board.startswith('pi'):
             apt_dependencies.extend([
                 'libraspberrypi0',
                 'libgst-dev',
