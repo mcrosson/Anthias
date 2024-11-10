@@ -377,11 +377,3 @@
     mode: "0644"
     owner: root
     group: root
-
-- name: Disable swap
-  ansible.builtin.command: /sbin/swapoff --all removes=/var/swap
-
-- name: Remove swapfile from disk
-  ansible.builtin.file:
-    path: /var/swap
-    state: absent
