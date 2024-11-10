@@ -215,6 +215,7 @@
       - bc
       - python3
       - python3-redis
+      - gettext-base
     state: present
 
 - name: Install Anthias dependencies (Raspberry Pi)
@@ -226,6 +227,8 @@
     ansible_architecture == "aarch64" or
     ansible_architecture == "armv7l" or
     ansible_architecture == "armv6l"
+  tags:
+    - raspberry-pi
 
 
 - name: Remove deprecated apt dependencies
@@ -257,13 +260,12 @@
       - docker-compose
     state: absent
 
-- name: Add Docker apt key (x86)
+- name: Add Docker apt key (debian)
   ansible.builtin.apt_key:
     url: https://download.docker.com/linux/debian/gpg
     state: present
-  when: ansible_architecture == "x86_64"
 
-- name: Add Docker apt key (Raspberry Pi)
+- name: Add Docker apt key (raspbian / raspberry pi os)
   ansible.builtin.apt_key:
     url: https://download.docker.com/linux/raspbian/gpg
     state: present
@@ -271,15 +273,30 @@
     ansible_architecture == "aarch64" or
     ansible_architecture == "armv7l" or
     ansible_architecture == "armv6l"
+  tags:
+    - raspberry-pi
 
 - name: Get Debian name
   ansible.builtin.command: lsb_release -cs
   register: debian_name
   changed_when: false
 
-- name: Set architecture
+- name: Set architecture (armhf)
   ansible.builtin.set_fact:
-    architecture: "{{ 'amd64' if ansible_architecture == 'x86_64' else 'armhf' }}"
+    architecture: "armhf"
+  when: |
+    ansible_architecture == "armv7l" or
+    ansible_architecture == "armv6l"
+
+- name: Set architecture (arm64)
+  ansible.builtin.set_fact:
+    architecture: "arm64"
+  when: ansible_architecture == "aarch64"
+
+- name: Set architecture (x86)
+  ansible.builtin.set_fact:
+    architecture: "amd64"
+  when: ansible_architecture == 'x86_64'
 
 - name: Add Docker repo
   ansible.builtin.lineinfile:
@@ -334,6 +351,8 @@
     ansible_architecture == "aarch64" or
     ansible_architecture == "armv7l" or
     ansible_architecture == "armv6l"
+  tags:
+    - raspberry-pi
 
 - name: Perform system upgrade
   ansible.builtin.apt:
