@@ -24,6 +24,8 @@ elif grep -qF "Raspberry Pi 3" /proc/device-tree/model; then
     export DEVICE_TYPE="pi3"
 elif grep -qF "Raspberry Pi 2" /proc/device-tree/model; then
     export DEVICE_TYPE="pi2"
+elif grep -qF "BananaPi M4 Zero" /proc/device-tree/model; then
+    export DEVICE_TYPE="bpi-m4-zero"
 else
     # If all else fail, assume pi1
     export DEVICE_TYPE="pi1"
@@ -45,7 +47,7 @@ cat /home/${USER}/screenly/docker-compose.yml.tmpl \
     | envsubst \
     > /home/${USER}/screenly/docker-compose.yml
 
-if [ "$DEVICE_TYPE" = "x86" ]; then
+if [ "$DEVICE_TYPE" = "x86" ] || [ "$DEVICE_TYPE" = "bpi-m4-zero" ] ; then
     sed -i '/devices:/ {N; /\n.*\/dev\/vchiq:\/dev\/vchiq/d}' \
         /home/${USER}/screenly/docker-compose.yml
 fi

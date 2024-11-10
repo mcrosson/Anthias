@@ -190,6 +190,10 @@ function run_ansible_playbook() {
         ANSIBLE_PLAYBOOK_ARGS+=("--skip-tags" "raspberry-pi")
     fi
 
+    if grep -qF "BananaPi M4 Zero" /proc/device-tree/model; then
+        ANSIBLE_PLAYBOOK_ARGS+=("--skip-tags" "raspberry-pi")
+    fi
+
     sudo -E -u ${USER} ${SUDO_ARGS[@]} \
         ansible-playbook site.yml "${ANSIBLE_PLAYBOOK_ARGS[@]}"
 }

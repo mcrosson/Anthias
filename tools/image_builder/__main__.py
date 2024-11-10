@@ -7,7 +7,7 @@ from python_on_whales import docker
 
 
 SHORT_HASH_LENGTH = 7
-BUILD_TARGET_OPTIONS = ['pi1', 'pi2', 'pi3', 'pi4', 'x86']
+BUILD_TARGET_OPTIONS = ['pi1', 'pi2', 'pi3', 'pi4', 'x86', 'bpi-m4-zero']
 SERVICES = (
     'server',
     'celery',
@@ -33,7 +33,13 @@ def get_build_parameters(build_target: str) -> dict:
         'target_platform': 'linux/amd64',
     }
 
-    if build_target == 'pi4':
+    if build_target == 'bpi-m4-zero':
+        return {
+            'board': 'bpi-m4-zero',
+            'base_image': 'debian',
+            'target_platform': 'linux/arm/v8'
+        }
+    elif build_target == 'pi4':
         return {
             'board': 'pi4',
             'base_image': 'balenalib/raspberrypi3-debian',
