@@ -52,9 +52,9 @@ if [ "$DEVICE_TYPE" = "x86" ] || [ "$DEVICE_TYPE" = "bpi-m4-zero" ] ; then
         /home/${USER}/screenly/docker-compose.yml
 fi
 
-sudo -E docker compose \
-    -f /home/${USER}/screenly/docker-compose.yml \
-    pull
+#sudo -E docker compose \
+#    -f /home/${USER}/screenly/docker-compose.yml \
+#    pull
 
 if [ -f /var/run/reboot-required ]; then
     exit 0
