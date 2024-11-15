@@ -37,13 +37,13 @@ def get_build_parameters(build_target: str) -> dict:
         return {
             'board': 'bpi-m4-zero',
             'base_image': 'debian',
-            'target_platform': 'linux/arm/v8'
+            'target_platform': 'linux/arm64'
         }
     elif build_target == 'pi4':
         return {
             'board': 'pi4',
-            'base_image': 'balenalib/raspberrypi3-debian',
-            'target_platform': 'linux/arm/v8',
+            'base_image': 'balenalib/raspberrypi4-64',
+            'target_platform': 'linux/arm64',
         }
     elif build_target == 'pi3':
         return {
@@ -296,6 +296,7 @@ def build_image(
             'chromedriver_dl_url': chromedriver_dl_url,
         })
     elif service == 'wifi-connect':
+        architecture = None
         if target_platform == 'linux/arm/v6':
             architecture = 'rpi'
         elif target_platform in ['linux/arm/v7', 'linux/arm/v8']:
